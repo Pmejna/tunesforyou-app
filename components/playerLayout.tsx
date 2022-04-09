@@ -1,5 +1,6 @@
 import { FunctionComponent } from "react";
 import {Box} from '@chakra-ui/layout';
+import SideBar from "./sidebar";
 
 interface PlayerLayoutProps {
     
@@ -14,7 +15,7 @@ const PlayerLayout: FunctionComponent<PlayerLayoutProps> = ({children}) => {
                     width: "250px", 
                 }}
             >
-                sidebar
+               <SideBar/>
             </Box>
             <Box sx={{
                     margin: "0 0 100px 250px", 
@@ -31,7 +32,7 @@ const PlayerLayout: FunctionComponent<PlayerLayoutProps> = ({children}) => {
                     bottom: 0, 
                     width: "100vw", 
                     height: "100px", 
-                    backgroundColor: "green"
+                    backgroundColor: "gray.800"
                 }}
             >
             </Box>
