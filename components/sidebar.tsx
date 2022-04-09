@@ -44,6 +44,21 @@ import {
      },
 ]
 
+const playlistMenuDummyData = [
+     {
+         name: 'Create Playlist',
+         icon: MdPlaylistAdd,
+         route: '/'
+     },
+     {
+         name: 'Favourites',
+         icon: MdFavorite,
+         route: '/favourites'
+     },
+]
+
+const playlistDummyData = new Array(30).fill(1).map((_, index) => `playlist ${index + 1}`);
+
 interface SideBarProps {
     
 }
@@ -57,7 +72,7 @@ const SideBar: FunctionComponent<SideBarProps> = () => {
             paddingX: "5px",
             color: "gray.200"
         }}>
-            <Box>
+            <Box  height="100%">
                 <Box sx={{
                     width: "130px",
                     marginBottom: "1.6rem",
@@ -81,6 +96,46 @@ const SideBar: FunctionComponent<SideBarProps> = () => {
                                             <LinkOverlay>
                                                 <ListIcon as={menuItem.icon} color="white" marginRight="1.2rem"/>
                                                 {menuItem.name}
+                                            </LinkOverlay>
+                                        </NextLink>
+                                    </LinkBox>
+                                </ListItem>
+                            ))
+                        }
+                    </List>
+                </Box>
+                <Box marginBottom="1.6rem">
+                    <List spacing={2}>
+                        {
+                            playlistMenuDummyData.map(menuItem => (
+                                <ListItem paddingX={"1.1rem"} fontSize="1rem" key={menuItem.name}>
+                                    <LinkBox>
+                                        <NextLink href={menuItem.route} passHref>
+                                            <LinkOverlay>
+                                                <ListIcon as={menuItem.icon} color="white" marginRight="1.2rem"/>
+                                                {menuItem.name}
+                                            </LinkOverlay>
+                                        </NextLink>
+                                    </LinkBox>
+                                </ListItem>
+                            ))
+                        }
+                    </List>
+                </Box>
+                <Divider marginLeft="1.1rem" width="calc(100% - 2.2rem)" borderColor="gray.700" marginBottom="1.6rem"/>
+                <Box 
+                    height="64%" 
+                    overflowY="auto"
+                    paddingY="1.1rem"
+                >
+                    <List spacing={2}>
+                        {
+                            playlistDummyData.map((playlist) => (
+                                <ListItem paddingX={"1.1rem"} fontSize="1rem" key={playlist}>
+                                    <LinkBox>
+                                        <NextLink href="/playlist" passHref>
+                                            <LinkOverlay>
+                                                {playlist}
                                             </LinkOverlay>
                                         </NextLink>
                                     </LinkBox>
