@@ -21,19 +21,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             {expiresIn: '8h'}
         );
 
+        let expires = 60 * 60 * 60 * 3600 * 3600;
         res.setHeader(
             'Set-Cookie',
             cookie.serialize(
-                'jwt-access', {
+                'jwt_token_access',
                 token, 
+                 {
                 httpOnly: true,
-                maxAge: 8 * 60 * 60 * 1000,
+                expires: new Date(expires),
                 path: '/',
                 sameSite: 'lax',
                 secure: process.env.NODE_ENV === 'production', 
                 }
             )
         );
+        res.setHeader(
+            'Connection',
+            'keep-alive'
+        )
         res.json(user);
     } else {
         res.status(401);

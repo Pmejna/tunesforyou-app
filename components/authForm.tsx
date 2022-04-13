@@ -21,17 +21,14 @@ const AuthForm: FunctionComponent<AuthFormProps> = ({mode}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false)
     const router = useRouter();
-    console.log(email, password)
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setIsLoading(true);
-        
         let password_confirm = mode === 'signup' ? passwordConfirm : null;
-        console.log(email, password, password_confirm);
-        const user = await auth(mode, {email, password, password_confirm});
+        await auth(mode, {email, password, password_confirm});
         setIsLoading(false);
         router.push('/')
     }
@@ -64,13 +61,14 @@ const AuthForm: FunctionComponent<AuthFormProps> = ({mode}) => {
                             type="submit" 
                             bg="green.600" 
                             isLoading={isLoading}
+                            loadingText="loading..."
                             sx={{
                                 "&:hover": {
-                                    bg: "green.4s00"
+                                    bg: "green.400"
                                 }
                             }}
                         >
-                            {mode}
+                            <Text>{mode}</Text>
                         </Button>
                         <Box>
                             {
