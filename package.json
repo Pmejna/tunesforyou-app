@@ -2,6 +2,7 @@
   "name": "tunesforyou-app",
   "version": "0.1.0",
   "private": true,
+  "types": "./ts/main.d.ts",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -28,6 +29,7 @@
     "react-howler": "^5.2.0",
     "react-icons": "^4.3.1",
     "reset-css": "^5.0.1",
+    "superjson": "^1.8.1",
     "swr": "^1.1.1"
   },
   "devDependencies": {

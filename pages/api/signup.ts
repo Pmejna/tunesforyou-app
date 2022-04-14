@@ -45,9 +45,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) =>  {
 
     res.setHeader(
         'Set-Cookie', 
-        cookie.serialize('jwt-access', token, {
+        cookie.serialize('jwt_token_access', token, {
             httpOnly: true,
-            maxAge: 8 * 60 * 60 * 1000,
+            maxAge: 5 * 60 * 1000,
+            expires: false, 
             path: '/',
             sameSite: 'lax',
             secure: process.env.NODE_ENV === 'production',        
