@@ -40,11 +40,6 @@ import { Spinner } from '@chakra-ui/react'
          icon: MdLibraryMusic,
          route: '/library'
      },
-     {
-         name: 'Home',
-         icon: MdHome,
-         route: '/'
-     },
 ]
 
 const playlistMenuDummyData = [

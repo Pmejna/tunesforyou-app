@@ -4,12 +4,12 @@ import prisma from './prisma';
 
 export const validateRoute = (handler) => {
     return async (req: NextApiRequest, res: NextApiResponse) => {
-        
+        const secret = process.env.JWT_SECRET;
         const token = req.cookies.jwt_token_access;
         if (token) {
             let user;
             try {
-                const {id} = jwt.verify(token, process.env.JWT_SECRET);
+                const {id} = jwt.verify(token, secret);
                 user = await prisma.user.findUnique({
                     where: {id},
                 })

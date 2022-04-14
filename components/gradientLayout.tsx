@@ -24,11 +24,11 @@ const GradientLayout: FunctionComponent<GradientLayoutProps> = ({
     }) => {
         return (
             <Box 
-                sx={{height: '100%', overflowY: "auto"}} 
+                sx={{height: '100%', overflowY: "auto", color: '#fff'}} 
                 bgGradient={`linear(${color}.500 0%, ${color}.600 20%, ${color}.700 40%, #242424)`}
             >
                 <Flex 
-                    sx={{bgColor: `${color}.700`, p: '2.4rem', color: '#fff',
+                    sx={{bgColor: `${color}.700`, p: '2.4rem',
                     }}
                     align="end" 
                 >
@@ -41,6 +41,9 @@ const GradientLayout: FunctionComponent<GradientLayoutProps> = ({
                         <Text fontSize="xs" fontWeight="regular">{description}</Text>
                     </Box>
                 </Flex>
+                <Box p="2.4rem">
+                    {children}
+                </Box>
             </Box>
     )
 };
