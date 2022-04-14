@@ -2,6 +2,7 @@
   "name": "tunesforyou-app",
   "version": "0.1.0",
   "private": true,
+  "types": "./ts/main.d.ts",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

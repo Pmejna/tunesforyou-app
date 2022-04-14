@@ -20,6 +20,9 @@ import {
     MdPlaylistAdd,
     MdFavorite
  } from "react-icons/md";
+import { usePlaylist } from "../lib/hooks";
+import { Spinner } from '@chakra-ui/react'
+
 
  const navMenuDummyData = [
      {
@@ -57,13 +60,12 @@ const playlistMenuDummyData = [
      },
 ]
 
-const playlistDummyData = new Array(30).fill(1).map((_, index) => `playlist ${index + 1}`);
 
-interface SideBarProps {
-    
-}
- 
-const SideBar: FunctionComponent<SideBarProps> = () => {
+
+
+const SideBar: FunctionComponent = () => {
+    const {playlists} = usePlaylist(); 
+    console.log(playlists)
     return ( 
         <Box sx={{
             width: "100%",
@@ -129,18 +131,25 @@ const SideBar: FunctionComponent<SideBarProps> = () => {
                     paddingY="1.1rem"
                 >
                     <List spacing={2}>
-                        {
-                            playlistDummyData.map((playlist) => (
-                                <ListItem paddingX={"1.1rem"} fontSize="1rem" key={playlist}>
+                        {   
+                        !playlists ? (
+                            <ListItem paddingX={"1.1rem"} fontSize="1rem" key={'spinner'}>
+                                <Spinner size="xl" color="red.500" />
+                            </ListItem>
+                        ) :
+                        (
+                            playlists.map((playlist) => (
+                                <ListItem paddingX={"1.1rem"} fontSize="1rem" key={playlist.id}>
                                     <LinkBox>
                                         <NextLink href="/playlist" passHref>
                                             <LinkOverlay>
-                                                {playlist}
-                                            </LinkOverlay>
+                                                {playlist.name}
+                                            </LinkOverlay> 
                                         </NextLink>
                                     </LinkBox>
                                 </ListItem>
                             ))
+                        )
                         }
                     </List>
                 </Box>
