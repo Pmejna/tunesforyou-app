@@ -19,13 +19,14 @@ export const validateRoute = (handler) => {
             }
             catch (e) {
             res.status(401);
-            res.json({error: 'Invalid token'});
-            return 
+            res.json({error: `${e}`});
+            return;  
+
             }
             return handler(req, res, user)
         }
         res.status(401);
-        res.json({error: 'Invalid token'});
+        res.json({error: 'Unauthorised user'});
         return 
     }
 }

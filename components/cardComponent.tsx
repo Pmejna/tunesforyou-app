@@ -5,15 +5,16 @@ import { FunctionComponent } from "react";
 interface CardComponentProps {
     name?: string;
     image?: string;
+    type?: "Artist" | "Playlist" | "Album";
 }
  
-const CardComponent: FunctionComponent<CardComponentProps> = ({name, image}) => {
+const CardComponent: FunctionComponent<CardComponentProps> = ({name, image, type}) => {
     return ( 
         <Box sx={{
             p: "0.8rem", 
             borderRadius: "0.6rem",
             boxShadow: "lg",
-            bg: "gray.800",
+            bg: "gray.900",
         }}>
             <Box sx={{
                 width: "160px", 
@@ -28,6 +29,7 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({name, image}) => 
                 <Image  height="auto" width="100%" src="https://source.unsplash.com/random?face" />
             </Box>
             <Text>{name}</Text>
+            <Text>{type?type:"Artist"}</Text>
         </Box> 
     );
 }

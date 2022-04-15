@@ -1,4 +1,4 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useEffect } from "react";
 import NextImage from 'next/image';
 import { 
     Box,
@@ -12,6 +12,8 @@ import {
  } from "@chakra-ui/layout";
 
  import NextLink from 'next/link';
+import { useRouter } from 'next/router'
+
 
  import {
     MdHome,
@@ -59,8 +61,14 @@ const playlistMenuDummyData = [
 
 
 const SideBar: FunctionComponent = () => {
-    const {playlists} = usePlaylist(); 
-    console.log(playlists)
+    const {playlists} = usePlaylist();
+    const router = useRouter(); 
+    useEffect(() => {
+        if(playlists.error) {
+            router.push('/signin');
+        }
+    }, [playlists])
+    console.log(playlists.error)
     return ( 
         <Box sx={{
             width: "100%",
@@ -127,7 +135,7 @@ const SideBar: FunctionComponent = () => {
                 >
                     <List spacing={2}>
                         {   
-                        !playlists ? (
+                        (!playlists || playlists === [] || playlists.error) ? (
                             <ListItem paddingX={"1.1rem"} fontSize="1rem" key={'spinner'}>
                                 <Spinner size="xl" color="red.500" />
                             </ListItem>
