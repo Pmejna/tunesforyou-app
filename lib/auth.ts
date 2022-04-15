@@ -20,7 +20,7 @@ export const validateRoute = (handler) => {
             catch (e) {
             res.status(401);
             res.json({error: `${e}`});
-            return;
+            return;  
 
             }
             return handler(req, res, user)

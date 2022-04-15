@@ -61,14 +61,14 @@ const playlistMenuDummyData = [
 
 
 const SideBar: FunctionComponent = () => {
-    const {playlists, isError} = usePlaylist();
+    const {playlists} = usePlaylist();
     const router = useRouter(); 
     useEffect(() => {
-        if(isError) {
+        if(playlists.error) {
             router.push('/signin');
         }
-    }, [isError])
-    console.log(playlists)
+    }, [playlists])
+    console.log(playlists.error)
     return ( 
         <Box sx={{
             width: "100%",
@@ -135,7 +135,7 @@ const SideBar: FunctionComponent = () => {
                 >
                     <List spacing={2}>
                         {   
-                        !playlists && !isError ? (
+                        (!playlists || playlists === [] || playlists.error) ? (
                             <ListItem paddingX={"1.1rem"} fontSize="1rem" key={'spinner'}>
                                 <Spinner size="xl" color="red.500" />
                             </ListItem>

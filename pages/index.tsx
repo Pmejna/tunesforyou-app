@@ -2,9 +2,13 @@ import { Box,  Text } from '@chakra-ui/layout'
 import { Grid, GridItem} from '@chakra-ui/react';
 import CardComponent from '../components/cardComponent';
 import GradientLayout from '../components/gradientLayout'
+import { useMe } from '../lib/hooks';
 import prisma from '../lib/prisma'
 
 const Home = ({artists}) => {
+  const {user} = useMe();
+
+  
   return (
     <GradientLayout 
       color="blackAlpha"
