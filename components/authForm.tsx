@@ -29,7 +29,7 @@ const AuthForm: FunctionComponent<AuthFormProps> = ({mode}) => {
         setIsLoading(true);
         let password_confirm = mode === 'signup' ? passwordConfirm : null;
         await auth(mode, {email, password, password_confirm});
-        setIsLoading(false);
+        // setIsLoading(false);
         router.push('/')
     }
 

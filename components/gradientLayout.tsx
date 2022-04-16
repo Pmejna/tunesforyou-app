@@ -1,5 +1,5 @@
 import {Box, Flex, Text} from '@chakra-ui/layout';
-import { Image } from '@chakra-ui/react';
+import { Image, Spinner } from '@chakra-ui/react';
 import { FunctionComponent } from 'react';
 import { chakraColor } from '../ts/types';
 
@@ -37,7 +37,10 @@ const GradientLayout: FunctionComponent<GradientLayoutProps> = ({
                     </Box>
                     <Box padding="1.3rem" lineHeight={"1.6rem"}>
                         <Text fontSize="xs" fontWeight="bold">{subtitle}</Text>
-                        <Text fontSize="4xl" fontWeight="regular" mb="0.6rem">{title}</Text>
+                        {
+                            !title ? <Spinner size="xl" color="red.500" />
+                            : <Text fontSize="4xl" fontWeight="regular" mb="0.6rem">{title}</Text>
+                        }
                         <Text fontSize="xs" fontWeight="regular">{description}</Text>
                     </Box>
                 </Flex>

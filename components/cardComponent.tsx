@@ -26,7 +26,7 @@ const CardComponent: FunctionComponent<CardComponentProps> = ({name, image, type
                 }}
                 boxShadow="xl"
             >
-                <Image  height="auto" width="100%" src="https://source.unsplash.com/random?face" />
+                <Image  height="auto" width="100%" src={`https://picsum.photos/200/300?random=${name}`} />
             </Box>
             <Text>{name}</Text>
             <Text>{type?type:"Artist"}</Text>

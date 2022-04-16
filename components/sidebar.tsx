@@ -61,14 +61,14 @@ const playlistMenuDummyData = [
 
 
 const SideBar: FunctionComponent = () => {
-    const {playlists} = usePlaylist();
+    const {playlists, isLoading} = usePlaylist();
     const router = useRouter(); 
     useEffect(() => {
         if(playlists.error) {
             router.push('/signin');
         }
     }, [playlists])
-    console.log(playlists.error)
+    console.log(playlists)
     return ( 
         <Box sx={{
             width: "100%",
@@ -135,16 +135,18 @@ const SideBar: FunctionComponent = () => {
                 >
                     <List spacing={2}>
                         {   
-                        (!playlists || playlists === [] || playlists.error) ? (
-                            <ListItem paddingX={"1.1rem"} fontSize="1rem" key={'spinner'}>
-                                <Spinner size="xl" color="red.500" />
-                            </ListItem>
+                        isLoading || playlists.error ? (
+                            null
                         ) :
                         (
-                            playlists.map((playlist) => (
+                            playlists?.map((playlist) => (
                                 <ListItem paddingX={"1.1rem"} fontSize="1rem" key={playlist.id}>
                                     <LinkBox>
-                                        <NextLink href="/playlist" passHref>
+                                        <NextLink href={{
+                                            pathname: `/playlist/[id]`,
+                                            query: {id: playlist.id}
+                                            }} 
+                                            passHref>
                                             <LinkOverlay>
                                                 {playlist.name}
                                             </LinkOverlay> 

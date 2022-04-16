@@ -30,3 +30,8 @@ export const validateRoute = (handler) => {
         return 
     }
 }
+
+export const validateToken = (token) => {
+    const user = jwt.verify(token, process.env.JWT_SECRET);
+    return user;
+}

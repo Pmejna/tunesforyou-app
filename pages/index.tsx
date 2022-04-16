@@ -6,15 +6,16 @@ import { useMe } from '../lib/hooks';
 import prisma from '../lib/prisma'
 
 const Home = ({artists}) => {
-  const {user} = useMe();
+  const {user, isLoading, isError} = useMe();
 
   
   return (
     <GradientLayout 
       color="blackAlpha"
       subtitle='profile'
-      title='Tunes for you'
-      description='16 public playlists'
+      title={isLoading ? null : (`${user.firstName} ${user.lastName}`)}
+      description={'16 public playlists'}
+      image={isLoading ? null : (`https://picsum.photos/200/300?random=${user.id}`)}
     >
       <Box p="1.3rem">
         <Text fontSize="2xl" fontWeight="bold">Top artist of this month</Text>
