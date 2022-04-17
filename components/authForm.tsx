@@ -28,9 +28,13 @@ const AuthForm: FunctionComponent<AuthFormProps> = ({mode}) => {
         e.preventDefault();
         setIsLoading(true);
         let password_confirm = mode === 'signup' ? passwordConfirm : null;
-        await auth(mode, {email, password, password_confirm});
-        // setIsLoading(false);
-        router.push('/')
+        const data = await auth(mode, {email, password, password_confirm});
+        if (!data.error) {
+            router.push('/')
+        } else {
+            setIsLoading(false);
+            /// show error
+        }
     }
 
     return (

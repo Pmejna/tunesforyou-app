@@ -1,6 +1,8 @@
 import { Box } from "@chakra-ui/layout";
-import { FunctionComponent } from "react";
+import router from "next/router";
+import { FunctionComponent, useEffect } from "react";
 import GradientLayout from "../../components/gradientLayout";
+import SongsTable from "../../components/songsTable";
 import { validateToken } from "../../lib/auth";
 import prisma from "../../lib/prisma";
 import {chakraColor} from "../../ts/types";
@@ -37,18 +39,22 @@ const Playlist: FunctionComponent<PlaylistProps> = ({playlist}) => {
             description={`${playlist.songs.length} songs`}
             image={`https://picsum.photos/200/300?random=${playlist.id}`}
         >
-
+            <SongsTable songs={playlist.songs}/>
         </GradientLayout>
      );
 }
  
 export const getServerSideProps = async ({query, req}) => {
-    const {id} = validateToken(req.cookies.jwt_token_access);
+    const token = validateToken(req.cookies.jwt_token_access);
+    console.log(token)
+    if (token.id === `Token expired`) {
+        router.push('/signin');
+    }
     const [playlist] = await prisma.playlist.findMany({
         where: {
             id: +query.id,
-            userId: id
-        },
+            userId: token.id
+        }, 
         include: {
             songs: {
                 include: {
