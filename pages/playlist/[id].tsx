@@ -1,4 +1,5 @@
 import { Box } from "@chakra-ui/layout";
+import { redirect } from "next/dist/server/api-utils";
 import router from "next/router";
 import { FunctionComponent, useEffect } from "react";
 import GradientLayout from "../../components/gradientLayout";
@@ -45,15 +46,22 @@ const Playlist: FunctionComponent<PlaylistProps> = ({playlist}) => {
 }
  
 export const getServerSideProps = async ({query, req}) => {
-    const token = validateToken(req.cookies.jwt_token_access);
-    console.log(token)
-    if (token.id === `Token expired`) {
-        router.push('/signin');
+    let user;
+    try {
+        user = validateToken(req.cookies.jwt_token_access);
+    } catch (error) {
+        return {
+            redirect: {
+                permament: false,
+                destination: '/signin',
+            }
+        }
     }
+
     const [playlist] = await prisma.playlist.findMany({
         where: {
             id: +query.id,
-            userId: token.id
+            userId: user.id
         }, 
         include: {
             songs: {
