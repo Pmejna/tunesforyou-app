@@ -21,7 +21,7 @@ const Home = ({artists}) => {
         <Text fontSize="2xl" fontWeight="bold">Top artist of this month</Text>
         <Text>Only visible to you</Text>
       </Box>
-      <Grid templateColumns='repeat(8, 1fr)' gap={4} p="1.3rem">
+      <Grid templateColumns='repeat(auto-fit, minmax(185px, 1fr))' gap={4} p="1.3rem">
         {
           artists.map(artist => (
             <GridItem w="100%" key={artist.name}>
