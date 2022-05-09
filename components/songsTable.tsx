@@ -6,11 +6,22 @@ import {AiOutlineClockCircle} from "react-icons/ai";
 import { IconButton } from "@chakra-ui/react";
 import { formatDate, formatTime } from "../lib/formatters";
 
+import { useStoreActions } from "easy-peasy"
+
 interface SongsTableProps {
     songs: any[];
 }
  
 const SongsTable: FunctionComponent<SongsTableProps> = ({songs}) => {
+    const playSongs = useStoreActions((store: any) => store.changeActiveSongs);
+    const setActiveSong = useStoreActions((store: any) => store.changeActiveSong);
+
+    const handlePlay = (activeSong?) => {
+        setActiveSong(activeSong || songs[0]);
+        playSongs(songs);
+    }
+
+
     return ( 
         <Box padding="1.3rem" bg="transparent">
             <Box padding="0.5rem" marginBottom="20px">
@@ -22,6 +33,7 @@ const SongsTable: FunctionComponent<SongsTableProps> = ({songs}) => {
                     size="lg"
                     colorScheme="green"
                     isRound
+                    onClick={() => handlePlay()}
                 />
             </Box>
             <Table variant="unstyled">
@@ -46,7 +58,9 @@ const SongsTable: FunctionComponent<SongsTableProps> = ({songs}) => {
                                         backgroundColor: "rgba(255, 255, 255, 0.1)"
                                     },
                                     cursor: "pointer"
-                            }}>
+                                }}
+                                onClick={() => handlePlay(song)}
+                            >
                                 <Td>{index}</Td>
                                 <Td>{song.title}</Td>
                                 <Td>{formatDate(song.createdAt)}</Td>

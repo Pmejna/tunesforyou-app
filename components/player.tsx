@@ -51,10 +51,10 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
     return ( 
         <Box>
             <Box>
-                {/* <ReactHowler 
+                <ReactHowler 
                     playing={playing}
                     src={activeSong?.url}
-                /> */}
+                />
             </Box>
             <Center>
                 <ButtonGroup sx={{color: "gray.600"}}>
