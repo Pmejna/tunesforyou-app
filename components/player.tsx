@@ -1,3 +1,4 @@
+import { FunctionComponent, useEffect, useRef, useState} from 'react';
 import {
     ButtonGroup,
     Box,
@@ -10,9 +11,8 @@ import {
     Flex,
     Text
 } from '@chakra-ui/react';
-
 import ReactHowler from 'react-howler';
-import { FunctionComponent, useEffect, useRef, useState} from 'react';
+
 import {
     MdShuffle,
     MdSkipPrevious,
@@ -23,9 +23,10 @@ import {
 } from 'react-icons/md';
 import {useStoreActions} from 'easy-peasy';
 
-interface PlayerProps {
-    
-}
+interface PlayerProps { 
+    songs: any;
+    activeSong: any;
+}   
  
 const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
     const [playing, setPlaying] = useState(true);
@@ -33,13 +34,27 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
     const [seek, setSeek] = useState(0.0);
     const [repeat, setRepeat] = useState(false);
     const [shuffle, setShuffle] = useState(false);
-    const [duration, setDuration] = useState(0);
-    
+    const [duration, setDuration] = useState(0.0);
+
+    const setPlayState = (value) => {
+        setPlaying(value);
+    }
+
+    const onShuffle = () => {
+        setShuffle(prevState => !prevState);
+    }
+
+    const onRepeat = () => {
+        setRepeat(prevState => !prevState);
+    }
 
     return ( 
         <Box>
             <Box>
-                {/* <ReactHowler/> */}
+                <ReactHowler 
+                    playing={playing}
+                    src={activeSong?.url}
+                />
             </Box>
             <Center>
                 <ButtonGroup sx={{color: "gray.600"}}>
@@ -48,7 +63,9 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
                         variant="link" 
                         aria-label='shuffle'
                         fontSize="24px"
+                        color={shuffle ? "#FFF" : "gray.600"}
                         icon={<MdShuffle/>}
+                        onClick={onShuffle}
                     />
                     <IconButton 
                         outline="none" 
@@ -57,22 +74,30 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
                         fontSize="24px"
                         icon={<MdSkipPrevious/>}
                     />
-                    <IconButton 
-                        outline="none" 
-                        variant="link" 
-                        aria-label='play'
-                        fontSize="40px"
-                        color={'#fff'}
-                        icon={<MdOutlinePlayCircleFilled/>}
-                    />
-                    <IconButton 
-                        outline="none" 
-                        variant="link" 
-                        aria-label='pause'
-                        fontSize="40px"
-                        color={'#fff'}
-                        icon={<MdOutlinePauseCircleFilled/>}
-                    />
+                    {
+                        playing ? (
+                            <IconButton 
+                                outline="none" 
+                                variant="link" 
+                                aria-label='pause'
+                                fontSize="40px"
+                                color={'#fff'}
+                                icon={<MdOutlinePauseCircleFilled/>}
+                                onClick={() => setPlayState(false)}
+                            />
+                            ) 
+                            : (
+                                <IconButton 
+                                    outline="none" 
+                                    variant="link" 
+                                    aria-label='play'
+                                    fontSize="40px"
+                                    color={'#fff'}
+                                    icon={<MdOutlinePlayCircleFilled/>}
+                                    onClick={() => setPlayState(true)}
+                                />
+                            )
+                    }
                     <IconButton 
                         outline="none" 
                         variant="link" 
@@ -83,9 +108,11 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
                     <IconButton 
                         outline="none" 
                         variant="link" 
-                        aria-label='next'
+                        aria-label='repeat'
                         fontSize="24px"
+                        color={repeat ? "#FFF" : "gray.600"}
                         icon={<MdOutlineRepeat/>}
+                        onClick={onRepeat}
                     />
                 </ButtonGroup>
             </Center>
