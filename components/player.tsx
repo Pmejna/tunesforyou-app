@@ -22,6 +22,7 @@ import {
     MdOutlineRepeat
 } from 'react-icons/md';
 import {useStoreActions} from 'easy-peasy';
+import { formatTime } from '../lib/formatters';
 
 interface PlayerProps { 
     songs: any;
@@ -30,11 +31,43 @@ interface PlayerProps {
  
 const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
     const [playing, setPlaying] = useState(true);
-    const [index, setIndex] = useState(0);
+    const [index, setIndex] = useState(
+        songs.findIndex((song: any) => song.id === activeSong.id)
+    );
     const [seek, setSeek] = useState(0.0);
+    const [isSeeking, setIsSeeking] = useState(false);
     const [repeat, setRepeat] = useState(false);
     const [shuffle, setShuffle] = useState(false);
     const [duration, setDuration] = useState(0.0);
+    const howlerRef = useRef<ReactHowler>(null);
+    const repeatRef = useRef(repeat);
+    const setActiveSong = useStoreActions((state: any) => state.changeActiveSong);
+
+    useEffect(() => {
+        let timerId;
+        if (playing && !isSeeking) {
+            const f = () => {
+                setSeek(howlerRef.current.seek());
+                timerId = requestAnimationFrame(f);
+            }
+        timerId = requestAnimationFrame(f);
+        return () => {
+            cancelAnimationFrame(timerId);
+            }
+        }
+
+        cancelAnimationFrame(timerId); 
+
+    }, [playing, isSeeking]);
+
+    useEffect(() => {
+        setActiveSong(songs[index]);
+        }, [index, setActiveSong, songs]
+    );
+
+    useEffect(() => {
+        repeatRef.current = repeat;
+    }, [repeat])
 
     const setPlayState = (value) => {
         setPlaying(value);
@@ -48,12 +81,59 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
         setRepeat(prevState => !prevState);
     }
 
+    const prevSong = () => {
+        setIndex(
+            prevState => {
+                return  prevState ? prevState -1 : songs.length - 1;
+            }
+        );
+    }
+
+    
+    const nextSong = () => {
+        setIndex(
+            prevState => {
+                if (shuffle) {
+                    let next = Math.floor(Math.random() * songs.length);
+                    while (next === prevState) {
+                        next = Math.floor(Math.random() * songs.length);
+                    }
+                    return next;
+                } else {
+                    return prevState === songs.length - 1 ? 0 : prevState + 1;
+                }
+            }
+        )
+    }
+
+    const onEnd = () => {
+        if (repeatRef.current) {
+            setSeek(0.0);
+            howlerRef.current.seek(0);    
+        } else {
+            nextSong();
+        }
+    }
+
+    const onLoad = () => {
+        const songDuration = howlerRef.current.duration();
+        setDuration(songDuration);
+    }   
+
+    const onSeek = (e) => {
+        setSeek(parseFloat(e[0]));
+        howlerRef.current.seek(e[0]);
+    }
+        
     return ( 
         <Box>
             <Box>
-                <ReactHowler 
+                <ReactHowler
+                    ref={howlerRef}
                     playing={playing}
                     src={activeSong?.url}
+                    onLoad={onLoad}
+                    onEnd={onEnd}
                 />
             </Box>
             <Center>
@@ -70,9 +150,10 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
                     <IconButton 
                         outline="none" 
                         variant="link" 
-                        aria-label='skip'
+                        aria-label='previous'
                         fontSize="24px"
                         icon={<MdSkipPrevious/>}
+                        onClick={prevSong}
                     />
                     {
                         playing ? (
@@ -104,6 +185,7 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
                         aria-label='next'
                         fontSize="24px"
                         icon={<MdSkipNext/>}
+                        onClick={nextSong}
                     />
                     <IconButton 
                         outline="none" 
@@ -119,15 +201,19 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
             <Box color="gray.600">
                 <Flex justify="center" align="center">
                     <Box width="10%" textAlign="left">
-                        <Text fontSize="sm">1:21</Text>
+                        <Text fontSize="sm">{formatTime(seek)}</Text>
                     </Box>
                     <Box width="80%">
                         <RangeSlider 
                             aria-label={['min', 'max']} 
                             step={0.1}
                             min={0}
-                            max={321}
                             id="player-range"
+                            max={duration ? +duration.toFixed(2) : 0}
+                            onChange={onSeek}
+                            onChangeStart={() => setIsSeeking(true)}
+                            onChangeEnd={() => setIsSeeking(false)}
+                            value={[seek]}
                         >
                             <RangeSliderTrack bg="gray.800">
                                 <RangeSliderFilledTrack bg="gray.600"/>
@@ -138,7 +224,7 @@ const Player: FunctionComponent<PlayerProps> = ({songs, activeSong}) => {
                         </RangeSlider>
                     </Box>
                     <Box width="10%" textAlign="right">
-                        <Text fontSize="sm">3:21</Text>
+                        <Text fontSize="sm">{formatTime(duration)}</Text>
                     </Box>
                 </Flex>
             </Box>
